@@ -61,6 +61,25 @@ const ASSETS = {
   warrantyMalfunction: "/icons/warranty-malfunction.svg",
   warrantyInfinity:    "/icons/warranty-infinity.svg",
 
+  // — Similar products —
+  heart:           "/icons/heart.svg",
+  arrowDownCircle: "/icons/arrow-down-circle.svg",
+
+  // — Ratings & Reviews —
+  reviewPhoto1: "/reviews/photo-1.png",
+  reviewPhoto2: "/reviews/photo-2.png",
+  reviewPhoto3: "/reviews/photo-3.png",
+  aiSparkle:    "/icons/ai-sparkle.svg",
+  thumbsUp:     "/icons/thumbs-up.svg",
+  verifiedBuy:  "/icons/verified-buy.svg",
+
+  // — Frequently bought together —
+  fbtCharger:   "/fbt/product-charger.png",
+  fbtCable:     "/fbt/product-cable.png",
+  fbtPowerbank: "/fbt/product-powerbank.png",
+  checkCircle:  "/icons/check-circle.svg",
+  plus:         "/icons/plus.svg",
+
   // — Sponsored products section —
   tecvLogo:               "/sponsored/tecv-logo.png",
   sponsoredProductApple:  "/sponsored/product-apple-charger.png",
@@ -202,6 +221,7 @@ function ComboCard() {
   return (
     <section className="mx-3 rounded-2xl bg-white px-4 py-3">
       <h3 className="text-base leading-5 font-bold text-bluegray-1000">In this combo</h3>
+
       <div className="mt-3 flex gap-2 overflow-x-auto pb-1 h-[72px]">
         {[1, 2].map((item) => (
           <article key={item} className="min-w-[228px] rounded-2xl border border-bluegray-200 p-1.5">
@@ -312,7 +332,7 @@ function ChipGroup({ options, selectedIndex }: { options: string[]; selectedInde
 }
 
 const TRUST_MARKERS = [
-  { icon: ASSETS.aiReturns,         label: "Low\nReturn",           bg: "bg-white border border-bluegray-200", size: "w-[104px]", weight: "font-semibold" },
+  { icon: ASSETS.sellerLowReturn,         label: "Low\nReturn",           bg: "bg-white border border-bluegray-200", size: "w-[104px]", weight: "font-semibold" },
   { icon: ASSETS.sellerPartner,     label: "Partner\nSince",        bg: "bg-white border border-bluegray-200", size: "w-[94px]",  weight: "font-semibold" },
   { icon: ASSETS.sellerDescribed,   label: "Product\nAs Described", bg: "bg-white border border-bluegray-200", size: "w-[94px]",  weight: "font-semibold" },
   { icon: ASSETS.sellerRatings,     label: "High\nRated",           bg: "bg-white border border-bluegray-200", size: "w-[94px]",  weight: "font-semibold" },
@@ -591,6 +611,376 @@ const USP_ICONS: Record<string, string> = {
   infinity:    ASSETS.warrantyInfinity,
 };
 
+const SIMILAR_PRODUCTS = [
+  { bestseller: true,  name: "Apple Airpods Pro 2 Wireless Earbuds", rating: "4.3", reviews: "(128)", price: "Ð899", listed: "1399", discount: "33%" },
+  { bestseller: false, name: "Apple Airpods Pro 2 Wireless Earbuds", rating: "4.3", reviews: "(128)", price: "Ð899", listed: "1399", discount: "33%" },
+  { bestseller: false, name: "Apple Airpods Pro 2 Wireless Earbuds", rating: "4.3", reviews: "(128)", price: "Ð899", listed: "1399", discount: "33%" },
+];
+
+function SimilarProducts() {
+  return (
+    <section className="mx-3 rounded-2xl bg-white p-3 flex flex-col gap-4">
+      <h2 className="px-0.5 text-[15px] font-bold leading-[17px] tracking-[-0.28px] text-bluegray-1000">
+        Similar Products
+      </h2>
+      <div className="flex gap-3 overflow-x-auto pb-1 -mr-3 pr-3">
+        {SIMILAR_PRODUCTS.map((p, i) => (
+          <article
+            key={i}
+            className="flex-shrink-0 w-[134px] flex flex-col overflow-hidden rounded-[10px] border-[0.5px] border-bluegray-200"
+          >
+            {/* Image container */}
+            <div className="relative aspect-[170.5/227.33] w-full bg-[rgba(0,40,136,0.02)] overflow-hidden">
+              <img src={ASSETS.airpods} alt="" className="absolute inset-0 h-full w-full object-contain p-3" />
+
+              {/* Best Seller tag */}
+              {p.bestseller && (
+                <div className="absolute left-0 top-0 h-5 rounded-br-[10px] bg-[#0a4f4a] px-1.5 py-0.5 flex items-center">
+                  <span className="text-[12px] font-semibold text-white tracking-[-0.12px]">Best Seller</span>
+                </div>
+              )}
+
+              {/* Wishlist heart */}
+              <button className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
+                <img src={ASSETS.heart} alt="" className="h-4 w-4" />
+              </button>
+
+              {/* Page dots */}
+              <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-[3px] rounded-full px-1 py-0.5">
+                <span className="h-1 w-1 rounded-full bg-[#0e0e0e]" />
+                <span className="h-[3px] w-[3px] rounded-full bg-[rgba(14,14,14,0.25)]" />
+                <span className="h-0.5 w-0.5 rounded-full bg-[rgba(14,14,14,0.25)]" />
+                <span className="h-px w-px rounded-full bg-[rgba(14,14,14,0.25)]" />
+              </div>
+
+              {/* Ad tag */}
+              <div className="absolute bottom-1.5 left-1.5 rounded bg-bluegray-200 px-1 py-0.5">
+                <span className="text-[10px] leading-[11px] text-bluegray-700">Ad</span>
+              </div>
+
+              {/* ATC button */}
+              <button className="absolute bottom-1.5 right-1.5 flex items-center justify-center rounded-lg border-[1.2px] border-bluegray-200 bg-white p-1">
+                <img src={ASSETS.plus} alt="" className="h-3.5 w-3.5" />
+              </button>
+            </div>
+
+            {/* Bottom container */}
+            <div className="flex flex-col gap-2 px-1.5 pt-1.5 pb-2">
+              <div className="flex flex-col gap-0.5">
+                <p className="text-[13px] font-medium leading-[17px] tracking-[-0.14px] text-[#212121] line-clamp-2 overflow-hidden">
+                  {p.name}
+                </p>
+                <div className="flex items-center gap-0.5 rounded bg-[#f7f8fa] px-1 py-0.5 self-start h-[18px]">
+                  <img src={ASSETS.sellerStar} alt="" className="h-3 w-3" />
+                  <span className="text-[12px] font-semibold leading-[14px] tracking-[-0.12px] text-bluegray-1000">{p.rating}</span>
+                  <span className="text-[12px] leading-[14px] tracking-[-0.12px] text-bluegray-600">{p.reviews}</span>
+                </div>
+              </div>
+
+              {/* Price + discount */}
+              <div className="flex flex-col gap-0.5">
+                <div className="flex flex-wrap items-end gap-0.5">
+                  <span className="text-[15px] font-bold leading-4 text-bluegray-900">{p.price}</span>
+                  <span className="text-[12px] leading-[14px] line-through text-bluegray-500">{p.listed}</span>
+                  <span className="text-[12px] font-semibold leading-[14px] tracking-[-0.12px] text-emerald-800">{p.discount}</span>
+                </div>
+                {/* Nudge */}
+                <div className="flex items-center gap-0.5 h-4">
+                  <img src={ASSETS.arrowDownCircle} alt="" className="h-3.5 w-3.5" />
+                  <p className="text-[12px] italic leading-4 tracking-[-0.12px] text-bluegray-700 truncate">
+                    Lowest price in 30 days
+                  </p>
+                </div>
+              </div>
+
+              {/* Express today */}
+              <img src={ASSETS.expressToday} alt="express today" className="h-[18px] w-auto self-start" />
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function StarRow({ filled, size = 16 }: { filled: number; size?: number }) {
+  return (
+    <div className="flex items-center">
+      {[0, 1, 2, 3, 4].map((i) => (
+        <img
+          key={i}
+          src={ASSETS.star}
+          alt=""
+          className={i < filled ? "" : "opacity-30 grayscale"}
+          style={{ width: size, height: size }}
+        />
+      ))}
+    </div>
+  );
+}
+
+const AI_BULLETS = [
+  "The portrait mode includes a fantastic wide-angle",
+  "Users appreciate the overall performance of phone.",
+  "Enjoy the wide-angle capability while using portrait\na fantastic wide-angle",
+  "Users appreciate the overall performance of this phone.",
+];
+
+const SPEC_TAGS = ["Mac OS", "8 GB RAM", "Internal Version", "256 GB", "Dual core memory"];
+
+const REVIEWS = [
+  {
+    name: "John Anderson",
+    meta: "8 days ago",
+    verified: true,
+    title: "This is simply amazing!",
+    body: "If the camera had the wide angle feature in the portrait mode. If the camera has more fe..",
+    photos: [ASSETS.reviewPhoto1, ASSETS.reviewPhoto2],
+    helpful: 15,
+  },
+  {
+    name: "John Anderson",
+    meta: "from trusted source · 6 months ago",
+    verified: false,
+    title: "This is simply amazing!",
+    body: "If the camera had the wide angle feature in the portrait mode. If the camera has more fe..",
+    photos: [ASSETS.reviewPhoto1, ASSETS.reviewPhoto2, ASSETS.reviewPhoto3, ASSETS.reviewPhoto2],
+    helpful: 14,
+  },
+];
+
+function RatingsAndReviews() {
+  const [aiOpen, setAiOpen] = useState<boolean>(true);
+
+  return (
+    <section className="mx-3 rounded-2xl bg-white p-3 flex flex-col gap-6">
+      {/* Title + average rating */}
+      <div className="flex flex-col gap-3">
+        <h2 className="px-0.5 text-[15px] font-bold leading-[17px] tracking-[-0.28px] text-bluegray-1000">
+          Ratings &amp; Reviews
+        </h2>
+        <div className="flex flex-col gap-0.5 px-1 pt-1">
+          <div className="flex items-center gap-1">
+            <span className="text-[22px] font-extrabold italic leading-6 tracking-[-0.2px] text-[#0e0e0e]">4.8</span>
+            <StarRow filled={4} size={22} />
+          </div>
+          <div className="flex items-center gap-0.5">
+            <p className="text-[12px] italic leading-[18px] text-bluegray-700">
+              Avg. rating based on 64 reviews from trusted sources
+            </p>
+            <img src={ASSETS.info} alt="" className="h-3.5 w-3.5" />
+          </div>
+        </div>
+      </div>
+
+      {/* AI Summary */}
+      <button
+        onClick={() => setAiOpen(!aiOpen)}
+        className="flex flex-col rounded-lg overflow-hidden text-left"
+        style={{ background: "linear-gradient(to right, rgba(65,70,206,0.04), rgba(191,61,235,0.04))" }}
+      >
+        <div className="flex items-center gap-3 h-[42px] px-3">
+          <div className="flex-1 flex items-center gap-1">
+            <span className="text-[14px] font-semibold leading-[18px] tracking-[-0.14px] bg-clip-text text-transparent bg-gradient-to-r from-[rgba(65,70,206,0.92)] to-[rgba(191,61,235,0.92)]">
+              64 reviews,
+            </span>
+            <span className="text-[14px] font-semibold leading-[18px] tracking-[-0.14px] bg-clip-text text-transparent bg-gradient-to-r from-[rgba(65,70,206,0.92)] to-[rgba(191,61,235,0.92)]">
+              summary by noon AI
+            </span>
+            <img src={ASSETS.aiSparkle} alt="" className="h-[13px] w-[13px]" />
+          </div>
+          <img
+            src={ASSETS.chevronDown}
+            alt=""
+            className={`h-3.5 w-3.5 transition-transform ${aiOpen ? "rotate-180" : ""}`}
+          />
+        </div>
+
+        {aiOpen && (
+          <div className="flex flex-col gap-2 p-3">
+            {AI_BULLETS.map((b) => (
+              <div key={b} className="flex items-start gap-1.5">
+                <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-bluegray-1000" />
+                <p className="flex-1 text-[14px] leading-[18px] tracking-[-0.14px] text-bluegray-900 whitespace-pre-line">
+                  {b}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </button>
+
+      {/* Photo Reviews */}
+      <div className="flex flex-col gap-3">
+        <h3 className="text-[15px] font-bold leading-[17px] tracking-[-0.28px] text-bluegray-1000">
+          Photo Reviews (64)
+        </h3>
+        <div className="flex gap-2 overflow-x-auto">
+          {[ASSETS.reviewPhoto1, ASSETS.reviewPhoto2, ASSETS.reviewPhoto3, ASSETS.reviewPhoto2].map((src, i) => (
+            <div key={i} className="h-[116px] w-[92.8px] shrink-0 overflow-hidden rounded border border-[#f5f5f5]">
+              <img src={src} alt="" className="h-full w-full object-cover" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Top Reviews */}
+      <div className="flex flex-col gap-3">
+        <h3 className="text-[15px] font-bold leading-[17px] tracking-[-0.28px] text-bluegray-1000">
+          Top Reviews (64)
+        </h3>
+
+        {REVIEWS.map((r, idx) => (
+          <article key={idx} className="rounded-2xl border border-bluegray-300 bg-white px-3 pt-3.5 pb-3 flex flex-col gap-3">
+            {/* User row */}
+            <div className="flex items-start gap-1">
+              <div className="flex-1 flex flex-col gap-1">
+                <p className="text-[14px] font-bold italic leading-[18px] tracking-[-0.14px] text-bluegray-1000">
+                  {r.name}
+                </p>
+                <div className="flex items-end gap-1">
+                  <StarRow filled={4} size={16} />
+                  <p className="text-[12px] italic leading-[14px] tracking-[-0.12px] text-bluegray-600">
+                    <span className="text-[#d0d4dd]">•</span> {r.meta}
+                  </p>
+                </div>
+              </div>
+              {r.verified && (
+                <div className="flex items-center gap-0.5 rounded-full pl-0.5 pr-1 py-0.5 bg-gradient-to-r from-bluegray-200 to-white">
+                  <img src={ASSETS.verifiedBuy} alt="" className="h-3.5 w-3.5" />
+                  <span className="text-[10px] font-semibold italic leading-3 text-[#3c3c3c]">Verified Buy</span>
+                </div>
+              )}
+            </div>
+
+            {/* Spec tags */}
+            <div className="flex flex-wrap gap-1">
+              {SPEC_TAGS.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded bg-bluegray-100 px-1 py-0.5 text-[11px] italic font-medium leading-[14px] tracking-[-0.12px] text-bluegray-800"
+                >
+                  {tag}
+                </span>
+              ))}
+              <span className="flex items-center gap-0.5 rounded bg-accent-50 px-1 py-0.5 text-[11px] italic font-medium leading-[14px] tracking-[-0.12px] text-accent-700">
+                View product
+                <img src={ASSETS.miniChevronRight} alt="" className="h-2.5 w-2.5" />
+              </span>
+            </div>
+
+            {/* Review content */}
+            <div className="flex flex-col gap-1">
+              <p className="text-[14px] font-semibold leading-[18px] tracking-[-0.14px] text-bluegray-900">
+                {r.title}
+              </p>
+              <p className="text-[14px] leading-[18px] text-bluegray-700">
+                <span className="italic">{r.body} </span>
+                <span className="font-medium not-italic text-bluegray-1000">more</span>
+              </p>
+              <p className="text-[12px] font-medium italic leading-[14px] tracking-[-0.12px] text-accent-700">
+                Translate to عربي
+              </p>
+            </div>
+
+            {/* Photos */}
+            <div className="flex gap-2.5">
+              {r.photos.map((src, i) => (
+                <div key={i} className="h-[120px] w-[96px] shrink-0 overflow-hidden rounded-lg border border-[#f5f5f5]">
+                  <img src={src} alt="" className="h-full w-full object-cover" />
+                </div>
+              ))}
+            </div>
+
+            {/* Helpful */}
+            <div>
+              <button className="flex h-6 items-center gap-1 rounded-md border border-bluegray-300 bg-bluegray-50 px-2 py-1.5">
+                <img src={ASSETS.thumbsUp} alt="" className="h-3 w-3" />
+                <span className="text-[12px] font-medium italic leading-[14px] tracking-[-0.12px] text-bluegray-1000">
+                  Helpful ({r.helpful})
+                </span>
+              </button>
+            </div>
+          </article>
+        ))}
+
+        {/* All customer reviews link */}
+        <button className="flex items-center justify-center gap-0.5 py-1">
+          <span className="text-[13px] font-semibold leading-[15px] tracking-[-0.12px] text-accent-700">
+            All customer reviews
+          </span>
+          <img src={ASSETS.miniChevronRight} alt="" className="h-3 w-3" />
+        </button>
+      </div>
+    </section>
+  );
+}
+
+const FBT_PRODUCTS = [
+  {
+    img: ASSETS.fbtCharger,
+    name: "USB C Plug, 735 Charger (Nano II 65W), PPS 3-Port Fast Compact USB C Charger for MacBook Pro/Air, iPad Pro, Galaxy S25/S24/S23/S22/S21/S20/S10, Dell XPS 13, Note 20/10+, iPhone 16/15, Pixel, Steam Deck, and More Black",
+    price: "Ð110",
+  },
+  {
+    img: ASSETS.fbtCable,
+    name: "60W USB Type C Cable Nylon Braided USB C to USB C 2.0 Cable (C to C) Compatible For iPhone",
+    price: "Ð25",
+  },
+  {
+    img: ASSETS.fbtPowerbank,
+    name: "Anker 737 Power Bank (PowerCore 24K3), 24,000mAh 3-Port Portable Charger with 140W Output, Smart Digital Display, Compatible with MacBook Pro/Air, iPhone…",
+    price: "Ð325",
+  },
+];
+
+function FrequentlyBoughtTogether() {
+  return (
+    <section className="mx-3 rounded-2xl bg-white p-3 flex flex-col gap-3">
+      <h2 className="px-0.5 text-[15px] font-bold leading-[17px] tracking-[-0.28px] text-bluegray-1000">
+        Frequently bought together
+      </h2>
+
+      <div className="relative flex items-start pr-1.5">
+        {FBT_PRODUCTS.map((p, i) => (
+          <div key={p.name} className="relative flex-1 basis-0 min-w-0 -mr-1.5 flex flex-col">
+            {/* Image */}
+            <div className="relative h-[140px] w-full rounded-lg border border-bluegray-200 bg-[rgba(53,60,115,0.03)] overflow-hidden">
+              <img src={p.img} alt="" className="absolute inset-0 h-full w-full object-contain p-2" />
+            </div>
+
+            {/* Bottom container */}
+            <div className="flex flex-col gap-1 px-1 pt-1.5 pb-2">
+              <p className="text-[12px] font-medium leading-[15px] tracking-[-0.14px] text-[#212121] line-clamp-2 overflow-hidden">
+                {p.name}
+              </p>
+              <p className="text-[12px] font-bold leading-4 text-bluegray-900">{p.price}</p>
+              <img src={ASSETS.expressToday} alt="express today" className="h-[15px] w-auto self-start" />
+            </div>
+
+            {/* Check circle (top-right) */}
+            <div className={`absolute -right-1.5 -top-1.5 h-6 w-6 rounded-full bg-white ${i === 1 ? "z-[12]" : ""}`}>
+              <img src={ASSETS.checkCircle} alt="" className="h-6 w-6" />
+            </div>
+
+            {/* Plus separator (only between cards) */}
+            {i < FBT_PRODUCTS.length - 1 && (
+              <div className="absolute -right-3 top-[58px] z-10 flex items-center rounded-2xl border border-[#f4f5fb] bg-white p-1">
+                <img src={ASSETS.plus} alt="" className="h-4 w-4" />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Buy all button */}
+      <button className="w-auto h-[42px] flex flex-col items-center justify-center flex-shrink-0 rounded-lg border border-[#96c6ff] bg-white text-[14px] font-semibold text-accent-700 shadow-[0_0_4px_rgba(0,118,255,0.1)]">
+        Buy all for Ð460
+      </button>
+    </section>
+  );
+}
+
 const SPONSORED_PRODUCTS = [
   { img: ASSETS.sponsoredProductApple,   name: "Charging Brick For Apple Devices 25W Charger",   price: "Ð89" },
   { img: ASSETS.sponsoredProductSamsung, name: "Charging Brick For Samsung Devices 25W arger",   price: "Ð69" },
@@ -624,7 +1014,7 @@ function SponsoredProducts() {
         </div>
 
         {/* Product cards — horizontal scroll */}
-        <div className="flex gap-2.5 overflow-x-auto px-3 pb-1">
+        <div className="flex flex-shrink-0 gap-2.5 overflow-x-auto px-3 pb-1 h-auto">
           {SPONSORED_PRODUCTS.map((p) => (
             <div
               key={p.name}
@@ -638,7 +1028,7 @@ function SponsoredProducts() {
                   {p.name}
                 </p>
                 <p className="text-[12px] font-bold leading-4 text-bluegray-900">{p.price}</p>
-                <img src={ASSETS.expressToday} alt="express today" className="h-[15px] w-auto" />
+                <img src={ASSETS.expressToday} alt="express today" className="h-[15px] w-auto self-start" />
               </div>
             </div>
           ))}
@@ -958,6 +1348,10 @@ export default function PdpDesign() {
       <BestsellerBanner />
       <SellerWidget />
       <ProductFeatures />
+      <SponsoredProducts />
+      <FrequentlyBoughtTogether />
+      <RatingsAndReviews />
+      <SimilarProducts />
       <BottomBar />
     </main>
   );
