@@ -201,7 +201,7 @@ function MainInfo() {
                 <span>Extra 10% Off</span>
                 <span>CODE: SAVEBIG</span>
               </div>
-              <img src={ASSETS.chevronRight} alt="" className="h-5 w-5" />
+              <img src={ASSETS.miniChevronRight} alt="" className="h-5 w-5" />
             </div>
             <div className="flex shrink-0 items-center gap-2 rounded-lg border border-dashed border-emerald-700/40 bg-[#f6fefd] py-1.5 pl-1.5 pr-2">
               <CouponIcon />
@@ -217,7 +217,7 @@ function MainInfo() {
               Bestseller #27 in <span className="font-semibold text-accent-700">Chargers</span>
             </p>
           </div>
-          <img src={ASSETS.chevronRight} alt="" className="h-5 w-5" />
+          <img src={ASSETS.miniChevronRight} alt="" className="h-5 w-5" />
         </div>
       </div>
     </section>
@@ -277,15 +277,15 @@ function DeliveryCard() {
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-[15px] leading-5 font-bold text-bluegray-1000">Delivery Information</h3>
         <div className="flex items-center gap-1">
-          <img src={ASSETS.noonOneLogo} alt="noon one" className="h-5 w-[33px]" />
-          <span className="text-xs text-bluegray-600">member</span>
+          {/* <img src={ASSETS.noonOneLogo} alt="noon one" className="h-5 w-[33px]" /> */}
+          {/* <span className="text-xs text-bluegray-600">member</span> */}
         </div>
       </div>
 
       {/* Express row */}
       <div className="rounded-xl border border-bluegray-200 pt-3 pb-3 px-3">
         <div className="flex items-center gap-1">
-          <img src={ASSETS.expressPill} alt="express" className="h-[19px] w-[59px]" />
+          <img src={ASSETS.express} alt="express" className="h-[19px] w-[59px]" />
           <p className="text-[14px] leading-[16.8px] text-bluegray-900">Get it Tomorrow before 12 PM</p>
         </div>
       </div>
@@ -319,9 +319,9 @@ function DeliveryCard() {
                 </p>
                 <img src={ASSETS.minutesBadge} alt="MINUTES" className="h-4 w-[69px]" />
               </div>
-              <div className="flex items-center gap-1 h-4">
+              <div className="flex items-center gap-1.5 h-4">
                 <span className="text-[14px] font-semibold text-[#0e0e0e]">Ð 923.00</span>
-                <img src={ASSETS.arrowUpRight} alt="" className="h-3 w-3" />
+                <img src={ASSETS.arrowUpRight} alt="" className="h-2.25 w-2.25" />
               </div>
             </div>
 
@@ -333,9 +333,9 @@ function DeliveryCard() {
                 </p>
                 <img src={ASSETS.supermallBadge} alt="supermall" className="h-[18px] w-[68px]" />
               </div>
-              <div className="flex items-center gap-1 h-4">
+              <div className="flex items-center gap-1.5 h-4">
                 <span className="text-[14px] font-semibold text-[#0e0e0e]">Ð 823.00</span>
-                <img src={ASSETS.arrowUpRight} alt="" className="h-3 w-3" />
+                <img src={ASSETS.arrowUpRight} alt="" className="h-2.25 w-2.25" />
               </div>
             </div>
           </div>
@@ -619,7 +619,7 @@ const ACCORDION_ITEMS = [
     id: "highlights",
     label: "Highlights",
     content: (
-      <div className="flex flex-col gap-2 px-3 pb-3">
+      <div className="flex flex-col gap-2 px-3 pb-3 pt-3">
         {[
           "GaN technology for compact, efficient charging",
           "65W max output — charges a MacBook Pro in under 2 hours",
