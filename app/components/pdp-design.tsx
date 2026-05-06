@@ -356,8 +356,8 @@ function FreeGifts() {
             <span className="absolute bottom-0 left-0 right-0 rounded-b-md bg-[#1155cb] text-center text-[13px] font-bold italic text-white">Free</span>
           </div>
           <div className="flex flex-col gap-1">
-            <p className="text-[15px] font-semibold italic leading-[18px] text-[#242a34]">Pepsi Gift Hamper</p>
-            <p className="text-xs italic font-medium text-[#67778e]">Pack of 6 cans &amp; Hoodie or tote bag</p>
+            <p className="text-[15px] font-semibold leading-[18px] text-[#242a34]">Pepsi Gift Hamper</p>
+            <p className="text-xs font-medium text-[#67778e]">Pack of 6 cans &amp; Hoodie or tote bag</p>
             <p className="text-[13px] font-semibold text-accent-700">View eligible products &gt;</p>
           </div>
         </div>
@@ -394,7 +394,7 @@ function ChipGroup({
             className={
               selected
                 ? "flex h-10 items-center justify-center rounded-[10px] border-[1.5px] border-accent-300 bg-white px-3 py-2.5 shadow-[0_8px_12px_rgba(14,14,14,0.07)] text-sm font-semibold leading-[18px] text-bluegray-1000"
-                : "flex h-10 items-center justify-center rounded-[10px] border border-bluegray-300 bg-white px-3 py-2.5 text-sm italic font-normal leading-[18px] text-bluegray-800"
+                : "flex h-10 items-center justify-center rounded-[10px] border border-bluegray-300 bg-white px-3 py-2.5 text-sm font-normal leading-[18px] text-bluegray-800"
             }
           >
             {label}
@@ -410,8 +410,8 @@ const TRUST_MARKERS = [
   { icon: "/icons/partner.svg",              label: "Partner\nSince",        bg: "bg-white border border-bluegray-200", size: "w-[94px]",  weight: "font-semibold" },
   { icon: "/icons/product-as-described.svg", label: "Product\nAs Described", bg: "bg-white border border-bluegray-200", size: "w-[94px]",  weight: "font-semibold" },
   { icon: "/icons/tick-decagram.svg",        label: "High\nRated",           bg: "bg-white border border-bluegray-200", size: "w-[94px]",  weight: "font-semibold" },
-  { icon: "/icons/sales-return.svg",         label: "Low & Easy\nReturns",   bg: "bg-accent-50",                        size: "w-[94px]",  weight: "font-medium" },
-  { icon: "/icons/support.svg",              label: "Secure\nTransactions",  bg: "bg-accent-50",                        size: "w-[94px]",  weight: "font-medium" },
+  // { icon: "/icons/sales-return.svg",         label: "Low & Easy\nReturns",   bg: "bg-accent-50",                        size: "w-[94px]",  weight: "font-medium" },
+  // { icon: "/icons/support.svg",              label: "Secure\nTransactions",  bg: "bg-accent-50",                        size: "w-[94px]",  weight: "font-medium" },
 ];
 
 function TrustMarkers() {
@@ -498,10 +498,10 @@ function VariantPicker() {
                       className={
                         "text-xs leading-[14px] tracking-[-0.12px] " +
                         (selected
-                          ? "font-semibold italic text-bluegray-1000"
+                          ? "font-semibold text-bluegray-1000"
                           : oos
-                          ? "italic text-bluegray-500"
-                          : "italic text-bluegray-800")
+                          ? "text-bluegray-500"
+                          : "text-bluegray-800")
                       }
                     >
                       {v.name}
@@ -916,12 +916,12 @@ function RatingsAndReviews() {
             {/* User row */}
             <div className="flex items-start gap-1">
               <div className="flex-1 flex flex-col gap-1">
-                <p className="text-[14px] font-bold italic leading-[18px] tracking-[-0.14px] text-bluegray-1000">
+                <p className="text-[14px] font-bold leading-[18px] tracking-[-0.14px] text-bluegray-1000">
                   {r.name}
                 </p>
                 <div className="flex items-end gap-1">
                   <StarRow filled={4} size={16} />
-                  <p className="text-[12px] italic leading-[14px] tracking-[-0.12px] text-bluegray-600">
+                  <p className="text-[12px] leading-[14px] tracking-[-0.12px] text-bluegray-600">
                     <span className="text-[#d0d4dd]">•</span> {r.meta}
                   </p>
                 </div>
@@ -929,7 +929,7 @@ function RatingsAndReviews() {
               {r.verified && (
                 <div className="flex items-center gap-0.5 rounded-full pl-0.5 pr-1 py-0.5 bg-gradient-to-r from-bluegray-200 to-white">
                   <img src={ASSETS.verifiedBuy} alt="" className="h-3.5 w-3.5" />
-                  <span className="text-[10px] font-semibold italic leading-3 text-[#3c3c3c]">Verified Buy</span>
+                  <span className="text-[10px] font-semibold leading-3 text-[#3c3c3c]">Verified Buy</span>
                 </div>
               )}
             </div>
@@ -939,14 +939,14 @@ function RatingsAndReviews() {
               {SPEC_TAGS.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded bg-bluegray-100 px-1 py-0.5 text-[11px] italic font-medium leading-[14px] tracking-[-0.12px] text-bluegray-800"
+                  className="rounded bg-bluegray-100 px-1 py-0.5 text-[11px] font-medium leading-[14px] tracking-[-0.12px] text-bluegray-800"
                 >
                   {tag}
                 </span>
               ))}
-              <span className="flex items-center gap-0.5 rounded bg-accent-50 px-1 py-0.5 text-[11px] italic font-medium leading-[14px] tracking-[-0.12px] text-accent-700">
+              <span className="flex items-center gap-0.5 rounded bg-accent-50 px-1 py-0.5 text-[11px] font-medium leading-[14px] tracking-[-0.12px] text-accent-700">
                 View product
-                <img src={ASSETS.miniChevronRight} alt="" className="h-2.5 w-2.5" />
+                <img src={ASSETS.chevronRight} alt="" className="h-2.5 w-2.5" />
               </span>
             </div>
 
@@ -956,10 +956,10 @@ function RatingsAndReviews() {
                 {r.title}
               </p>
               <p className="text-[14px] leading-[18px] text-bluegray-700">
-                <span className="italic">{r.body} </span>
+                <span className="not-italic">{r.body} </span>
                 <span className="font-medium not-italic text-bluegray-1000">more</span>
               </p>
-              <p className="text-[12px] font-medium italic leading-[14px] tracking-[-0.12px] text-accent-700">
+              <p className="text-[12px] font-medium leading-[14px] tracking-[-0.12px] text-accent-700">
                 Translate to عربي
               </p>
             </div>
@@ -977,7 +977,7 @@ function RatingsAndReviews() {
             <div>
               <button className="flex h-6 items-center gap-1 rounded-md border border-bluegray-300 bg-bluegray-50 px-2 py-1.5">
                 <img src={ASSETS.thumbsUp} alt="" className="h-3 w-3" />
-                <span className="text-[12px] font-medium italic leading-[14px] tracking-[-0.12px] text-bluegray-1000">
+                <span className="text-[12px] font-medium leading-[14px] tracking-[-0.12px] text-bluegray-1000">
                   Helpful ({r.helpful})
                 </span>
               </button>
@@ -990,7 +990,7 @@ function RatingsAndReviews() {
           <span className="text-[13px] font-semibold leading-[15px] tracking-[-0.12px] text-accent-700">
             All customer reviews
           </span>
-          <img src={ASSETS.miniChevronRight} alt="" className="h-4 w-4" />
+          <img src={ASSETS.chevronRight} alt="" className="h-3 w-3" />
         </button>
       </div>
     </section>
