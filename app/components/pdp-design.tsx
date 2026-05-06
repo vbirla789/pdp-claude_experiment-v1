@@ -61,6 +61,13 @@ const ASSETS = {
   warrantyMalfunction: "/icons/warranty-malfunction.svg",
   warrantyInfinity:    "/icons/warranty-infinity.svg",
 
+  // — Delivery options dropdown —
+  expressPill:    "/icons/express-pill.svg",
+  noonOneLogo:    "/icons/noon-one-logo.svg",
+  minutesBadge:   "/icons/minutes-badge.svg",
+  supermallBadge: "/icons/supermall-badge.svg",
+  arrowUpRight:   "/icons/arrow-up-right.svg",
+
   // — Similar products —
   heart:           "/icons/heart.svg",
   arrowDownCircle: "/icons/arrow-down-circle.svg",
@@ -138,7 +145,7 @@ function MainInfo() {
         </div>
         <div className="flex items-center gap-1 text-[13px] font-semibold text-accent-700">
           Visit Store
-          <img src={ASSETS.chevronRight} alt="" className="h-3 w-3" />
+          <img src={ASSETS.chevronRight} alt="" className="h-4 w-4" />
         </div>
       </div>
 
@@ -194,7 +201,7 @@ function MainInfo() {
                 <span>Extra 10% Off</span>
                 <span>CODE: SAVEBIG</span>
               </div>
-              <img src={ASSETS.chevronRight} alt="" className="h-2.5 w-2.5" />
+              <img src={ASSETS.chevronRight} alt="" className="h-5 w-5" />
             </div>
             <div className="flex shrink-0 items-center gap-2 rounded-lg border border-dashed border-emerald-700/40 bg-[#f6fefd] py-1.5 pl-1.5 pr-2">
               <CouponIcon />
@@ -210,7 +217,7 @@ function MainInfo() {
               Bestseller #27 in <span className="font-semibold text-accent-700">Chargers</span>
             </p>
           </div>
-          <img src={ASSETS.chevronRight} alt="" className="h-3 w-3" />
+          <img src={ASSETS.chevronRight} alt="" className="h-5 w-5" />
         </div>
       </div>
     </section>
@@ -249,7 +256,7 @@ function ComboCard() {
 function AdCard() {
   return (
     <section className="mx-3 rounded-lg bg-white">
-      <div className="flex items-center justify-between rounded-md border border-border-primary px-2 h-8">
+      <div className="flex items-center justify-between rounded-md border border-border-primary px-2 h-8 overflow-hidden">
         <div className="flex items-center gap-2">
           <img src={ASSETS.adThumb} alt="" className="h-8 w-8 rounded bg-bluegray-50" />
           <p className="max-w-[160px] truncate text-xs italic text-noon-black">TCF09 40W Dual USB-C / Type-C...</p>
@@ -264,19 +271,76 @@ function AdCard() {
 }
 
 function DeliveryCard() {
+  const [open, setOpen] = useState(false);
   return (
     <section className="mx-3 rounded-2xl bg-white p-3 flex flex-col">
-      <div className="mb-2 flex items-center justify-between">
+      <div className="mb-3 flex items-center justify-between">
         <h3 className="text-[15px] leading-5 font-bold text-bluegray-1000">Delivery Information</h3>
-        <span className="text-xs text-bluegray-600">one member</span>
+        <div className="flex items-center gap-1">
+          <img src={ASSETS.noonOneLogo} alt="noon one" className="h-5 w-[33px]" />
+          <span className="text-xs text-bluegray-600">member</span>
+        </div>
       </div>
-      <div className="rounded-xl border border-bluegray-200 px-3 py-2">
-        <p className="text-sm text-bluegray-900">Get it Tomorrow before 12 PM</p>
+
+      {/* Express row */}
+      <div className="rounded-xl border border-bluegray-200 pt-3 pb-3 px-3">
+        <div className="flex items-center gap-1">
+          <img src={ASSETS.expressPill} alt="express" className="h-[19px] w-[59px]" />
+          <p className="text-[14px] leading-[16.8px] text-bluegray-900">Get it Tomorrow before 12 PM</p>
+        </div>
       </div>
-      <button className="mt-2 flex w-full items-center justify-between rounded-xl bg-bluegray-100 px-3 py-3 text-sm leading-5 font-semibold text-bluegray-700">
-        Other Delivery Options
-        <img src={ASSETS.chevronDown} alt="" className="h-5 w-5" />
-      </button>
+
+      {/* Other Delivery Options accordion */}
+      <div className="mt-2 rounded-xl bg-bluegray-100 p-3 flex flex-col gap-3">
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          className="flex w-full items-center gap-1"
+        >
+          <p className="flex-1 text-left text-[14px] font-semibold leading-[16.8px] text-bluegray-700">
+            Other Delivery Options
+          </p>
+          <img
+            src={ASSETS.chevronDown}
+            alt=""
+            className={`h-5 w-5 transition-transform ${open ? "rotate-180" : ""}`}
+          />
+        </button>
+
+        {open && (
+          <div className="flex flex-col gap-3">
+            <div className="h-px w-full bg-bluegray-200" />
+
+            {/* Option 1: 15 Mins */}
+            <div className="flex items-center justify-between py-1">
+              <div className="flex items-center gap-1">
+                <p className="text-[14px] tracking-[-0.112px] text-[#0e0e0e]">
+                  Get in <span className="font-bold text-[#b82121]">15 Mins</span>
+                </p>
+                <img src={ASSETS.minutesBadge} alt="MINUTES" className="h-4 w-[69px]" />
+              </div>
+              <div className="flex items-center gap-1 h-4">
+                <span className="text-[14px] font-semibold text-[#0e0e0e]">Ð 923.00</span>
+                <img src={ASSETS.arrowUpRight} alt="" className="h-3 w-3" />
+              </div>
+            </div>
+
+            {/* Option 2: 1 Hr 20 Mins */}
+            <div className="flex items-center justify-between py-1">
+              <div className="flex items-center gap-1">
+                <p className="text-[14px] tracking-[-0.112px] text-[#0e0e0e]">
+                  Get in <span className="font-bold text-[#2122b8]">1 Hr 20 Mins</span>
+                </p>
+                <img src={ASSETS.supermallBadge} alt="supermall" className="h-[18px] w-[68px]" />
+              </div>
+              <div className="flex items-center gap-1 h-4">
+                <span className="text-[14px] font-semibold text-[#0e0e0e]">Ð 823.00</span>
+                <img src={ASSETS.arrowUpRight} alt="" className="h-3 w-3" />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </section>
   );
 }
@@ -309,14 +373,24 @@ const COLOUR_VARIANTS = [
   { name: "736 GaN", img: "/variants/variant-736-gan.png", state: "out-of-stock" as const },
 ];
 
-function ChipGroup({ options, selectedIndex }: { options: string[]; selectedIndex: number }) {
+function ChipGroup({
+  options,
+  selectedIndex,
+  onSelect,
+}: {
+  options: string[];
+  selectedIndex: number;
+  onSelect: (i: number) => void;
+}) {
   return (
     <div className="flex h-10 items-center gap-3">
       {options.map((label, i) => {
         const selected = i === selectedIndex;
         return (
-          <div
+          <button
             key={label}
+            type="button"
+            onClick={() => onSelect(i)}
             className={
               selected
                 ? "flex h-10 items-center justify-center rounded-[10px] border-[1.5px] border-accent-300 bg-white px-3 py-2.5 shadow-[0_8px_12px_rgba(14,14,14,0.07)] text-sm font-semibold leading-[18px] text-bluegray-1000"
@@ -324,7 +398,7 @@ function ChipGroup({ options, selectedIndex }: { options: string[]; selectedInde
             }
           >
             {label}
-          </div>
+          </button>
         );
       })}
     </div>
@@ -332,12 +406,12 @@ function ChipGroup({ options, selectedIndex }: { options: string[]; selectedInde
 }
 
 const TRUST_MARKERS = [
-  { icon: ASSETS.sellerLowReturn,         label: "Low\nReturn",           bg: "bg-white border border-bluegray-200", size: "w-[104px]", weight: "font-semibold" },
-  { icon: ASSETS.sellerPartner,     label: "Partner\nSince",        bg: "bg-white border border-bluegray-200", size: "w-[94px]",  weight: "font-semibold" },
-  { icon: ASSETS.sellerDescribed,   label: "Product\nAs Described", bg: "bg-white border border-bluegray-200", size: "w-[94px]",  weight: "font-semibold" },
-  { icon: ASSETS.sellerRatings,     label: "High\nRated",           bg: "bg-white border border-bluegray-200", size: "w-[94px]",  weight: "font-semibold" },
-  { icon: ASSETS.sellerLowReturn,   label: "Low & Easy\nReturns",   bg: "bg-accent-50",                        size: "w-[94px]",  weight: "font-medium" },
-  { icon: ASSETS.aiWarranty,        label: "Secure\nTransactions",  bg: "bg-accent-50",                        size: "w-[94px]",  weight: "font-medium" },
+  { icon: "/icons/returns-low.svg",          label: "Low\nReturn",           bg: "bg-white border border-bluegray-200", size: "w-[104px]", weight: "font-semibold" },
+  { icon: "/icons/partner.svg",              label: "Partner\nSince",        bg: "bg-white border border-bluegray-200", size: "w-[94px]",  weight: "font-semibold" },
+  { icon: "/icons/product-as-described.svg", label: "Product\nAs Described", bg: "bg-white border border-bluegray-200", size: "w-[94px]",  weight: "font-semibold" },
+  { icon: "/icons/tick-decagram.svg",        label: "High\nRated",           bg: "bg-white border border-bluegray-200", size: "w-[94px]",  weight: "font-semibold" },
+  { icon: "/icons/sales-return.svg",         label: "Low & Easy\nReturns",   bg: "bg-accent-50",                        size: "w-[94px]",  weight: "font-medium" },
+  { icon: "/icons/support.svg",              label: "Secure\nTransactions",  bg: "bg-accent-50",                        size: "w-[94px]",  weight: "font-medium" },
 ];
 
 function TrustMarkers() {
@@ -361,6 +435,10 @@ function TrustMarkers() {
 }
 
 function VariantPicker() {
+  const [versionIdx, setVersionIdx] = useState(0);
+  const [chargerIdx, setChargerIdx] = useState(0);
+  const [colourIdx, setColourIdx] = useState(1); // 735 GaN II selected by default
+
   return (
     <section className="mx-3 rounded-2xl bg-white p-3 flex flex-col">
       <div className="flex flex-col gap-6">
@@ -372,7 +450,7 @@ function VariantPicker() {
               <span className="text-[13px] font-semibold leading-[15px] text-accent-700">Learn more</span>
             </div>
           </div>
-          <ChipGroup options={["UK 3 PIN", "US 2 PIN"]} selectedIndex={0} />
+          <ChipGroup options={["UK 3 PIN", "US 2 PIN"]} selectedIndex={versionIdx} onSelect={setVersionIdx} />
         </div>
 
         <div className="flex flex-col gap-3">
@@ -380,7 +458,7 @@ function VariantPicker() {
             <p className="flex-1 text-[15px] font-bold leading-[17px] text-bluegray-1000">Charger Model</p>
             <span className="text-[13px] font-semibold leading-[15px] text-accent-700">Size Guide</span>
           </div>
-          <ChipGroup options={["UK 3 PIN", "US 2 PIN"]} selectedIndex={0} />
+          <ChipGroup options={["UK 3 PIN", "US 2 PIN"]} selectedIndex={chargerIdx} onSelect={setChargerIdx} />
         </div>
 
         <div className="flex flex-col gap-3">
@@ -389,19 +467,22 @@ function VariantPicker() {
             <span className="text-[13px] font-semibold leading-[15px] text-accent-700">View All</span>
           </div>
           <div className="flex gap-3">
-            {COLOUR_VARIANTS.map((v) => {
-              const selected = v.state === "selected";
+            {COLOUR_VARIANTS.map((v, i) => {
               const oos = v.state === "out-of-stock";
+              const selected = i === colourIdx;
               return (
-                <div
+                <button
                   key={v.name}
+                  type="button"
+                  disabled={oos}
+                  onClick={() => !oos && setColourIdx(i)}
                   className={
-                    "flex w-[88px] flex-col items-center overflow-hidden rounded-[10px] bg-white pb-0.5 " +
+                    "flex w-[88px] flex-col items-center overflow-hidden rounded-[10px] bg-white pb-0.5 transition " +
                     (selected
                       ? "border-[1.5px] border-accent-400 shadow-[0_8px_24px_rgba(14,14,14,0.07)]"
                       : oos
-                      ? "border border-dashed border-bluegray-300"
-                      : "border border-bluegray-300")
+                      ? "border border-dashed border-bluegray-300 cursor-not-allowed"
+                      : "border border-bluegray-300 cursor-pointer")
                   }
                 >
                   <div className="relative h-[88px] w-full overflow-hidden">
@@ -426,7 +507,7 @@ function VariantPicker() {
                       {v.name}
                     </p>
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>
@@ -519,7 +600,7 @@ const ACCORDION_ITEMS = [
     id: "overview",
     label: "Overview",
     content: (
-      <div className="flex flex-col gap-3 px-3 pb-3">
+      <div className="flex flex-col gap-3 px-3 pt-3 pb-3">
         <p className="text-[14px] leading-[18px] tracking-[-0.14px] text-bluegray-1000">
           A compact, high-performance wall charger built with GaN (Gallium Nitride) technology for faster, cooler, and more efficient charging. With 65W output, it can power laptops, tablets, and smartphones at top speed.
         </p>
@@ -753,7 +834,7 @@ function RatingsAndReviews() {
   const [aiOpen, setAiOpen] = useState<boolean>(true);
 
   return (
-    <section className="mx-3 rounded-2xl bg-white p-3 flex flex-col gap-6">
+    <section className="mx-3 rounded-3xl bg-white p-3 flex flex-col gap-6">
       {/* Title + average rating */}
       <div className="flex flex-col gap-3">
         <h2 className="px-0.5 text-[15px] font-bold leading-[17px] tracking-[-0.28px] text-bluegray-1000">
@@ -779,7 +860,7 @@ function RatingsAndReviews() {
         className="flex flex-col rounded-lg overflow-hidden text-left"
         style={{ background: "linear-gradient(to right, rgba(65,70,206,0.04), rgba(191,61,235,0.04))" }}
       >
-        <div className="flex items-center gap-3 h-[42px] px-3">
+        <div className="flex items-center gap-3 h-[42px] px-3 border border-white">
           <div className="flex-1 flex items-center gap-1">
             <span className="text-[14px] font-semibold leading-[18px] tracking-[-0.14px] bg-clip-text text-transparent bg-gradient-to-r from-[rgba(65,70,206,0.92)] to-[rgba(191,61,235,0.92)]">
               64 reviews,
@@ -792,7 +873,7 @@ function RatingsAndReviews() {
           <img
             src={ASSETS.chevronDown}
             alt=""
-            className={`h-3.5 w-3.5 transition-transform ${aiOpen ? "rotate-180" : ""}`}
+            className={`h-5 w-5 transition-transform ${aiOpen ? "rotate-180" : ""}`}
           />
         </div>
 
@@ -884,7 +965,7 @@ function RatingsAndReviews() {
             </div>
 
             {/* Photos */}
-            <div className="flex gap-2.5">
+            <div className="flex gap-2.5 overflow-hidden">
               {r.photos.map((src, i) => (
                 <div key={i} className="h-[120px] w-[96px] shrink-0 overflow-hidden rounded-lg border border-[#f5f5f5]">
                   <img src={src} alt="" className="h-full w-full object-cover" />
@@ -909,7 +990,7 @@ function RatingsAndReviews() {
           <span className="text-[13px] font-semibold leading-[15px] tracking-[-0.12px] text-accent-700">
             All customer reviews
           </span>
-          <img src={ASSETS.miniChevronRight} alt="" className="h-3 w-3" />
+          <img src={ASSETS.miniChevronRight} alt="" className="h-4 w-4" />
         </button>
       </div>
     </section>
@@ -959,7 +1040,7 @@ function FrequentlyBoughtTogether() {
             </div>
 
             {/* Check circle (top-right) */}
-            <div className={`absolute -right-1.5 -top-1.5 h-6 w-6 rounded-full bg-white ${i === 1 ? "z-[12]" : ""}`}>
+            <div className="absolute -right-1.5 -top-1.5 h-6 w-6 rounded-full bg-white z-20">
               <img src={ASSETS.checkCircle} alt="" className="h-6 w-6" />
             </div>
 
@@ -1283,7 +1364,7 @@ function ProductDetails() {
           return (
             <div key={id} className="overflow-hidden rounded-xl">
               <button
-                className="flex h-11 w-full items-center justify-between bg-bluegray-100 px-3"
+                className="flex h-11 w-full items-center justify-between bg-bluegray-100 px-3 border border-white"
                 onClick={() => setOpen(isOpen ? "" : id)}
               >
                 <span className="text-[14px] font-semibold leading-[18px] tracking-[-0.14px] text-bluegray-1000">
@@ -1326,7 +1407,7 @@ function BottomBar() {
 
 export default function PdpDesign() {
   return (
-    <main className="mx-auto min-h-screen w-full max-w-[375px] bg-gradient-to-b from-white to-[#F3F3F7] flex flex-col gap-3">
+    <main className="mx-auto min-h-screen w-full max-w-[375px] bg-gradient-to-b from-white from-0% to-[#F3F3F7] to-[24%] flex flex-col gap-3">
       <section className="relative">
         <HeaderButtons />
         <img src={ASSETS.productImage} alt="iPhone" className="h-[512px] w-full object-cover" />
