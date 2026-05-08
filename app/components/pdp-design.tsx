@@ -1,5 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { PRODUCTS, ppu, savingsPct, threshold, shouldShowSavings, type Product, type ShadeVariant, type StorageVariant, type WeightVariant } from "@/app/lib/products";
 
 const ASSETS = {
   // — Remote Figma images (no local copy, expire in 7 days) —
@@ -104,13 +106,27 @@ const ASSETS = {
 };
 
 function HeaderButtons() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const btn =
     "h-10 w-10 rounded-full border border-bluegray-200 bg-white/90 flex items-center justify-center";
   return (
-    <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between p-3">
-      <button className={btn} aria-label="Back">
+    <div
+      className={
+        "fixed top-0 left-1/2 -translate-x-1/2 z-30 w-full max-w-[375px] flex items-center justify-between p-3 transition-colors " +
+        (scrolled ? "bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]" : "")
+      }
+    >
+      <Link href="/" className={btn} aria-label="Back to products">
         <img src={ASSETS.back} alt="" className="h-5 w-5" />
-      </button>
+      </Link>
       <div className="flex gap-2">
         <button className={btn} aria-label="Search">
           <img src={ASSETS.search} alt="" className="h-5 w-5" />
@@ -135,13 +151,14 @@ function CouponIcon() {
   );
 }
 
-function MainInfo() {
+function MainInfo({ product }: { product: Product }) {
+  const discountPct = Math.round(((product.mrp - product.price) / product.mrp) * 100);
   return (
     <section className="mx-3 rounded-[16px] bg-accent-100 flex flex-col">
       <div className="flex items-center justify-between px-3 py-2">
         <div className="flex items-center gap-1 text-sm font-bold text-accent-700">
           <img src={ASSETS.store} alt="" className="h-6 w-6" />
-          Apple
+          {product.brand}
         </div>
         <div className="flex items-center gap-1 text-[13px] font-semibold text-accent-700">
           Visit Store
@@ -151,40 +168,46 @@ function MainInfo() {
 
       <div className="rounded-2xl bg-white p-3 flex flex-col">
         <h1 className="text-base leading-5 font-medium text-bluegray-1000">
-          iPhone Air 256GB Sky Blue 5G (eSim only) With FaceTime - International Version
+          {product.name}
         </h1>
 
         <div className="mt-2 flex gap-1 text-[13px]">
           <span className="flex items-center gap-1 rounded-md bg-bluegray-100 px-2 py-1 text-bluegray-1000 font-semibold leading-[18px]">
             <img src={ASSETS.star} alt="" className="h-3.5 w-3.5" />
-            4.6 <span className="font-semibold text-bluegray-800">(1541 reviews)</span>
+            {product.rating} <span className="font-semibold text-bluegray-800">({product.reviewCount} reviews)</span>
           </span>
-          <span className="flex items-center gap-1 rounded-md bg-orange-50 px-2 py-1 text-bluegray-1000 font-medium leading-[18px]">
-            <img src={ASSETS.card} alt="" className="h-4 w-4" />
-            Prepaid Only
-          </span>
+          {product.prepaidOnly && (
+            <span className="flex items-center gap-1 rounded-md bg-orange-50 px-2 py-1 text-bluegray-1000 font-medium leading-[18px]">
+              <img src={ASSETS.card} alt="" className="h-4 w-4" />
+              Prepaid Only
+            </span>
+          )}
         </div>
 
         <div className="mt-3 flex flex-col gap-3">
           <div className="flex items-end gap-1">
-            <span className="text-[22px] leading-6 font-bold text-bluegray-1000">AED 3699</span>
-            <span className="text-base leading-5 text-bluegray-600 line-through">AED 4299</span>
-            <span className="text-sm leading-[18px] font-semibold text-green-700">14%</span>
+            <span className="text-[22px] leading-6 font-bold text-bluegray-1000">{product.currency} {product.price}</span>
+            <span className="text-base leading-5 text-bluegray-600 line-through">{product.currency} {product.mrp}</span>
+            <span className="text-sm leading-[18px] font-semibold text-green-700">{discountPct}%</span>
             <span className="text-sm leading-[18px] text-bluegray-600">(incl. of VAT)</span>
           </div>
-          <div className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-accent-50 to-white px-2 py-2 text-bluegray-800">
-            <div className="flex items-center gap-2">
-              <img src={ASSETS.combo} alt="" className="h-5 w-5" />
-              <span className="text-sm font-medium">Saving 45 with Combo</span>
+          {product.comboSaving && (
+            <div className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-accent-50 to-white px-2 py-2 text-bluegray-800">
+              <div className="flex items-center gap-2">
+                <img src={ASSETS.combo} alt="" className="h-5 w-5" />
+                <span className="text-sm font-medium">Saving {product.comboSaving} with Combo</span>
+              </div>
+              <img src={ASSETS.info} alt="" className="h-4 w-4" />
             </div>
-            <img src={ASSETS.info} alt="" className="h-4 w-4" />
-          </div>
+          )}
 
-          <div className="inline-flex items-center gap-1.5 self-start rounded bg-bluegray-100 px-1.5 py-1 text-sm text-bluegray-800">
-            <span>500ml</span>
-            <span className="h-3 w-px bg-bluegray-400" />
-            <span>Ð2.35/ml</span>
-          </div>
+          {product.ppu && (
+            <div className="inline-flex items-center gap-1.5 self-start rounded bg-bluegray-100 px-1.5 py-1 text-sm text-bluegray-800">
+              <span>{product.ppu.quantity}</span>
+              <span className="h-3 w-px bg-bluegray-400" />
+              <span>{product.ppu.perUnit}</span>
+            </div>
+          )}
 
           <div className="flex items-center gap-1.5">
             <span className="rounded bg-bg-supermall px-1.5 py-0.5 text-[13px] font-semibold leading-[17px] text-white">Mega Deal</span>
@@ -205,22 +228,107 @@ function MainInfo() {
             </div>
             <div className="flex shrink-0 items-center gap-2 rounded-lg border border-dashed border-emerald-700/40 bg-[#f6fefd] py-1.5 pl-1.5 pr-2">
               <CouponIcon />
-              <span className="text-sm font-semibold leading-[18px] text-text-primary whitespace-nowrap">Extra 10% off up to Ð150</span>
+              <span className="text-sm font-semibold leading-[18px] text-text-primary whitespace-nowrap">Extra 10% off up to {product.currency}150</span>
             </div>
           </div>
         </div>
 
-        <div className="mt-3 flex h-9 items-center justify-between rounded-[10px] bg-bluegray-100 px-2 py-3">
-          <div className="flex items-center gap-2">
-            <img src={ASSETS.bestseller} alt="" className="h-6 w-6" />
-            <p className="text-sm italic leading-[19px] text-bluegray-900">
-              Bestseller #27 in <span className="font-semibold text-accent-700">Chargers</span>
-            </p>
+        {product.bestsellerRank && (
+          <div className="mt-3 flex h-9 items-center justify-between rounded-[10px] bg-bluegray-100 px-2 py-3">
+            <div className="flex items-center gap-2">
+              <img src={ASSETS.bestseller} alt="" className="h-6 w-6" />
+              <p className="text-sm italic leading-[19px] text-bluegray-900">
+                Bestseller #{product.bestsellerRank} in <span className="font-semibold text-accent-700">{product.bestsellerCategory}</span>
+              </p>
+            </div>
+            <img src={ASSETS.miniChevronRight} alt="" className="h-5 w-5" />
           </div>
-          <img src={ASSETS.miniChevronRight} alt="" className="h-5 w-5" />
-        </div>
+        )}
       </div>
     </section>
+  );
+}
+
+function SuccessorBanner({ product }: { product: Product }) {
+  if (!product.successorSlug) return null;
+  const successor = PRODUCTS[product.successorSlug];
+  if (!successor) return null;
+
+  const isOOS = product.oos === true;
+  const successorDiscount = Math.round(((successor.mrp - successor.price) / successor.mrp) * 100);
+
+  // Compact title — strip the "with FaceTime…" tail for the banner
+  const shortTitle = successor.name.split(" - ")[0];
+
+  if (isOOS) {
+    // Prominent variant — primary CTA, larger image, no SOLD OUT pill (that's on the hero)
+    return (
+      <Link
+        href={`/p/${successor.slug}`}
+        className="mx-3 rounded-2xl bg-white border-[1.5px] border-accent-300 p-3 flex flex-col gap-3 shadow-[0_8px_24px_rgba(0,118,255,0.08)]"
+      >
+        <span className="text-[14px] font-semibold leading-[18px] tracking-[-0.14px] text-bluegray-700">
+          Newer model available
+        </span>
+        <div className="flex items-center gap-3">
+          <div className="h-16 w-16 shrink-0 rounded-xl bg-bluegray-50 overflow-hidden border border-bluegray-100">
+            <img src={successor.hero} alt="" className="h-full w-full object-cover" />
+          </div>
+          <div className="flex-1 flex flex-col gap-1 min-w-0">
+            <p className="text-[14px] font-semibold leading-[18px] tracking-[-0.14px] text-bluegray-1000 line-clamp-2">
+              {shortTitle}
+            </p>
+            <div className="flex items-end gap-1 flex-wrap">
+              <span className="text-[16px] font-bold leading-5 tracking-[-0.16px] text-bluegray-1000">
+                {successor.currency} {successor.price}
+              </span>
+              <span className="text-[12px] leading-[14px] line-through text-bluegray-500">
+                {successor.currency} {successor.mrp}
+              </span>
+              {successorDiscount > 0 && (
+                <span className="text-[12px] font-bold leading-[14px] text-emerald-700">{successorDiscount}% OFF</span>
+              )}
+              <span className="ml-auto text-[12px] font-semibold leading-3 text-emerald-700">In Stock</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center justify-center gap-1 h-11 rounded-lg bg-noon-blue text-white text-[14px] font-bold tracking-[-0.14px]">
+          See {successor.brand} {shortTitle.split(" ").slice(1, 3).join(" ")}
+          <img src={ASSETS.miniChevronRight} alt="" className="h-4 w-4 brightness-0 invert" />
+        </div>
+      </Link>
+    );
+  }
+
+  // Compact in-stock legacy banner — single row
+  return (
+    <Link
+      href={`/p/${successor.slug}`}
+      className="mx-3 rounded-2xl bg-white border border-bluegray-200 p-3 flex items-center gap-3"
+    >
+      <div className="h-12 w-12 shrink-0 rounded-lg bg-bluegray-50 overflow-hidden border border-bluegray-100">
+        <img src={successor.hero} alt="" className="h-full w-full object-cover" />
+      </div>
+      <div className="flex-1 flex flex-col gap-0.5 min-w-0">
+        <p className="text-[12px] leading-[14px] tracking-[-0.12px] text-bluegray-600">Newer model available</p>
+        <p className="text-[14px] font-semibold leading-[18px] tracking-[-0.14px] text-bluegray-1000 truncate">
+          {shortTitle}
+        </p>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[13px] font-bold leading-4 text-bluegray-1000">
+            {successor.currency} {successor.price}
+          </span>
+          <span className="text-[11px] leading-[13px] line-through text-bluegray-500">
+            {successor.currency} {successor.mrp}
+          </span>
+          {successorDiscount > 0 && (
+            <span className="text-[11px] font-bold leading-[13px] text-emerald-700">{successorDiscount}% OFF</span>
+          )}
+          <span className="ml-auto text-[11px] font-semibold leading-3 text-emerald-700">In Stock</span>
+        </div>
+      </div>
+      <img src={ASSETS.miniChevronRight} alt="" className="h-5 w-5 shrink-0" />
+    </Link>
   );
 }
 
@@ -434,85 +542,235 @@ function TrustMarkers() {
   );
 }
 
-function VariantPicker() {
-  const [versionIdx, setVersionIdx] = useState(0);
-  const [chargerIdx, setChargerIdx] = useState(0);
-  const [colourIdx, setColourIdx] = useState(1); // 735 GaN II selected by default
+// ─── Storage variant tile (Req #1: Variant Pricing) ────────────────────────
+function StoragePicker({ config, currency }: { config: Extract<Product["variantPicker"], { kind: "storage" }>; currency: string }) {
+  const [idx, setIdx] = useState(config.defaultIndex);
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2 px-0.5">
+        <p className="flex-1 text-[15px] font-bold leading-[17px] text-bluegray-1000">{config.title}</p>
+      </div>
+      <div className="flex gap-2 flex-wrap">
+        {config.variants.map((v: StorageVariant, i: number) => {
+          const selected = i === idx;
+          return (
+            <button
+              key={v.label}
+              onClick={() => setIdx(i)}
+              className={
+                "flex flex-col items-start gap-0.5 rounded-[10px] px-3 py-2 min-w-[88px] transition " +
+                (selected
+                  ? "border-[1.5px] border-accent-400 bg-white shadow-[0_8px_24px_rgba(14,14,14,0.07)]"
+                  : "border border-bluegray-300 bg-white")
+              }
+            >
+              <span className={"text-sm leading-[18px] " + (selected ? "font-semibold text-bluegray-1000" : "text-bluegray-800")}>
+                {v.label}
+              </span>
+              <span className="text-[12px] font-bold leading-[15px] text-bluegray-900">
+                {currency} {v.sp.toLocaleString()}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Shade variant tile (Req #3: Hex swatches) ─────────────────────────────
+function ShadePicker({ config, currency }: { config: Extract<Product["variantPicker"], { kind: "shade" }>; currency: string }) {
+  const [idx, setIdx] = useState(config.defaultIndex);
+  const selectedShade = config.variants[idx];
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2 px-0.5">
+        <p className="flex-1 text-[15px] font-bold leading-[17px] text-bluegray-1000">
+          {config.title}: <span className="text-bluegray-700">{selectedShade.code}-{selectedShade.name}</span>
+        </p>
+        <span className="text-[13px] font-semibold leading-[15px] text-accent-700">View All</span>
+      </div>
+      <div className="flex gap-2 overflow-x-auto pb-1">
+        {config.variants.map((v: ShadeVariant, i: number) => {
+          const selected = i === idx;
+          const oos = v.outOfStock;
+          return (
+            <button
+              key={v.code}
+              disabled={oos}
+              onClick={() => !oos && setIdx(i)}
+              className={
+                "flex flex-col items-stretch shrink-0 w-[64px] rounded-[10px] overflow-hidden transition " +
+                (selected
+                  ? "border-[1.5px] border-accent-400 shadow-[0_8px_24px_rgba(14,14,14,0.07)]"
+                  : oos
+                  ? "border border-dashed border-bluegray-300 opacity-60 cursor-not-allowed"
+                  : "border border-bluegray-300")
+              }
+            >
+              <div className="relative h-[64px] w-full" style={{ backgroundColor: v.hex }}>
+                {oos && (
+                  <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-center bg-[rgba(16,22,40,0.5)] py-0.5">
+                    <span className="text-[9px] font-semibold italic text-white">OUT OF STOCK</span>
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col items-center px-1 py-1 bg-white">
+                <span className={"text-[11px] leading-[13px] " + (selected ? "font-semibold text-bluegray-1000" : "text-bluegray-800")}>
+                  {currency} {v.sp}
+                </span>
+                <span className="text-[10px] leading-[12px] text-bluegray-600 line-through">{v.mrp}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Weight variant tile (Req #1 + #2: PPU + savings %) ────────────────────
+function WeightPicker({ config, currency }: { config: Extract<Product["variantPicker"], { kind: "weight" }>; currency: string }) {
+  const [idx, setIdx] = useState(config.defaultIndex);
+  const smallest = config.variants.reduce((a, b) => (a.count < b.count ? a : b));
+  const smallestPpu = ppu(smallest.sp, smallest.count);
 
   return (
-    <section className="mx-3 rounded-2xl bg-white p-3 flex flex-col">
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-2 px-0.5">
-            <p className="flex-1 text-[15px] font-bold leading-[17px] text-bluegray-1000">Versions</p>
-            <div className="flex items-center gap-0.5">
-              <img src={ASSETS.info} alt="" className="h-4 w-4" />
-              <span className="text-[13px] font-semibold leading-[15px] text-accent-700">Learn more</span>
-            </div>
-          </div>
-          <ChipGroup options={["UK 3 PIN", "US 2 PIN"]} selectedIndex={versionIdx} onSelect={setVersionIdx} />
-        </div>
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2 px-0.5">
+        <p className="flex-1 text-[15px] font-bold leading-[17px] text-bluegray-1000">{config.title}</p>
+      </div>
+      <div className="flex gap-2 flex-wrap">
+        {config.variants.map((v: WeightVariant, i: number) => {
+          const selected = i === idx;
+          const variantPpu = ppu(v.sp, v.count);
+          const mrpDiscount = Math.round(((v.mrp - v.sp) / v.mrp) * 100);
+          return (
+            <button
+              key={v.label}
+              onClick={() => setIdx(i)}
+              className={
+                "flex flex-col items-stretch gap-2 rounded-[10px] px-3 py-3 min-w-[120px] text-left transition " +
+                (selected
+                  ? "border-[1.5px] border-accent-400 bg-white shadow-[0_8px_24px_rgba(14,14,14,0.07)]"
+                  : "border border-bluegray-300 bg-white")
+              }
+            >
+              <span className={"text-sm leading-[18px] text-left " + (selected ? "font-semibold text-bluegray-1000" : "text-bluegray-800")}>
+                {v.label}
+              </span>
+              <span className="h-px w-full bg-bluegray-200" />
+              <div className="flex flex-col items-start gap-0.5">
+                {mrpDiscount > 0 && (
+                  <span className="text-[12px] font-bold leading-[14px] text-emerald-700 text-left">{mrpDiscount}% OFF</span>
+                )}
+                <div className="flex items-baseline gap-1">
+                  <span className="text-[14px] font-bold leading-[17px] text-bluegray-1000">{currency} {v.sp}</span>
+                  <span className="text-[12px] leading-[14px] line-through text-bluegray-500">{v.mrp}</span>
+                </div>
+                <span className="text-[12px] leading-[14px] text-bluegray-500 text-left">
+                  {currency} {variantPpu.toFixed(2)}/{config.unit.replace(/s$/, "")}
+                </span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <p className="flex-1 text-[15px] font-bold leading-[17px] text-bluegray-1000">Charger Model</p>
-            <span className="text-[13px] font-semibold leading-[15px] text-accent-700">Size Guide</span>
-          </div>
-          <ChipGroup options={["UK 3 PIN", "US 2 PIN"]} selectedIndex={chargerIdx} onSelect={setChargerIdx} />
-        </div>
+// ─── Charger variant (existing UI) ──────────────────────────────────────────
+function ChargerPicker({ config }: { config: Extract<Product["variantPicker"], { kind: "charger" }> }) {
+  const [versionIdx, setVersionIdx] = useState(0);
+  const [chargerIdx, setChargerIdx] = useState(0);
+  const defaultColourIdx = config.colourVariants.findIndex((v) => v.state === "selected");
+  const [colourIdx, setColourIdx] = useState(defaultColourIdx >= 0 ? defaultColourIdx : 0);
 
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-2 px-0.5">
-            <p className="flex-1 text-[15px] font-bold leading-[17px] text-bluegray-1000">Colour</p>
-            <span className="text-[13px] font-semibold leading-[15px] text-accent-700">View All</span>
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2 px-0.5">
+          <p className="flex-1 text-[15px] font-bold leading-[17px] text-bluegray-1000">{config.versionTitle}</p>
+          <div className="flex items-center gap-0.5">
+            <img src={ASSETS.info} alt="" className="h-4 w-4" />
+            <span className="text-[13px] font-semibold leading-[15px] text-accent-700">Learn more</span>
           </div>
-          <div className="flex gap-3">
-            {COLOUR_VARIANTS.map((v, i) => {
-              const oos = v.state === "out-of-stock";
-              const selected = i === colourIdx;
-              return (
-                <button
-                  key={v.name}
-                  type="button"
-                  disabled={oos}
-                  onClick={() => !oos && setColourIdx(i)}
-                  className={
-                    "flex w-[88px] flex-col items-center overflow-hidden rounded-[10px] bg-white pb-0.5 transition " +
-                    (selected
-                      ? "border-[1.5px] border-accent-400 shadow-[0_8px_24px_rgba(14,14,14,0.07)]"
-                      : oos
-                      ? "border border-dashed border-bluegray-300 cursor-not-allowed"
-                      : "border border-bluegray-300 cursor-pointer")
-                  }
-                >
-                  <div className="relative h-[88px] w-full overflow-hidden">
-                    <img src={v.img} alt={v.name} className="h-full w-full object-cover" />
-                    {oos && (
-                      <div className="absolute left-0 top-1/2 flex h-[18px] w-full -translate-y-1/2 items-center justify-center bg-[rgba(16,22,40,0.3)] p-1">
-                        <span className="shrink-0 whitespace-nowrap text-[9px] font-semibold italic leading-3 text-white">OUT OF STOCK</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex w-full items-center justify-center p-1">
-                    <p
-                      className={
-                        "text-xs leading-[14px] tracking-[-0.12px] " +
-                        (selected
-                          ? "font-semibold text-bluegray-1000"
-                          : oos
-                          ? "text-bluegray-500"
-                          : "text-bluegray-800")
-                      }
-                    >
-                      {v.name}
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+        </div>
+        <ChipGroup options={config.versionOptions} selectedIndex={versionIdx} onSelect={setVersionIdx} />
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2">
+          <p className="flex-1 text-[15px] font-bold leading-[17px] text-bluegray-1000">{config.chargerModelTitle}</p>
+          <span className="text-[13px] font-semibold leading-[15px] text-accent-700">Size Guide</span>
+        </div>
+        <ChipGroup options={config.chargerOptions} selectedIndex={chargerIdx} onSelect={setChargerIdx} />
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2 px-0.5">
+          <p className="flex-1 text-[15px] font-bold leading-[17px] text-bluegray-1000">{config.colourTitle}</p>
+          <span className="text-[13px] font-semibold leading-[15px] text-accent-700">View All</span>
+        </div>
+        <div className="flex gap-3">
+          {config.colourVariants.map((v, i) => {
+            const oos = v.state === "out-of-stock";
+            const selected = i === colourIdx;
+            return (
+              <button
+                key={v.name}
+                type="button"
+                disabled={oos}
+                onClick={() => !oos && setColourIdx(i)}
+                className={
+                  "flex w-[88px] flex-col items-center overflow-hidden rounded-[10px] bg-white pb-0.5 transition " +
+                  (selected
+                    ? "border-[1.5px] border-accent-400 shadow-[0_8px_24px_rgba(14,14,14,0.07)]"
+                    : oos
+                    ? "border border-dashed border-bluegray-300 cursor-not-allowed"
+                    : "border border-bluegray-300 cursor-pointer")
+                }
+              >
+                <div className="relative h-[88px] w-full overflow-hidden">
+                  <img src={v.img} alt={v.name} className="h-full w-full object-cover" />
+                  {oos && (
+                    <div className="absolute left-0 top-1/2 flex h-[18px] w-full -translate-y-1/2 items-center justify-center bg-[rgba(16,22,40,0.3)] p-1">
+                      <span className="shrink-0 whitespace-nowrap text-[9px] font-semibold italic leading-3 text-white">OUT OF STOCK</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex w-full items-center justify-center p-1">
+                  <p
+                    className={
+                      "text-xs leading-[14px] tracking-[-0.12px] " +
+                      (selected
+                        ? "font-semibold text-bluegray-1000"
+                        : oos
+                        ? "text-bluegray-500"
+                        : "text-bluegray-800")
+                    }
+                  >
+                    {v.name}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
+    </div>
+  );
+}
+
+function VariantPicker({ product }: { product: Product }) {
+  const config = product.variantPicker;
+  return (
+    <section className="mx-3 rounded-2xl bg-white p-3 flex flex-col">
+      {config.kind === "storage" && <StoragePicker config={config} currency={product.currency} />}
+      {config.kind === "shade" && <ShadePicker config={config} currency={product.currency} />}
+      {config.kind === "weight" && <WeightPicker config={config} currency={product.currency} />}
+      {config.kind === "charger" && <ChargerPicker config={config} />}
     </section>
   );
 }
@@ -1350,8 +1608,32 @@ function ExtendedWarranty() {
   );
 }
 
-function ProductDetails() {
+function ProductDetails({ product }: { product: Product }) {
   const [open, setOpen] = useState<string>("");
+
+  const accordionItems = [
+    {
+      id: "overview",
+      label: "Overview",
+      content: (
+        <div className="flex flex-col gap-3 px-3 pt-3 pb-3">
+          <p className="text-[14px] leading-[18px] tracking-[-0.14px] text-bluegray-1000">
+            {product.overview}
+          </p>
+          <ul className="flex flex-col gap-2">
+            {product.highlights.map((bullet) => (
+              <li key={bullet} className="flex items-start gap-1">
+                <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-bluegray-1000" />
+                <p className="text-[14px] leading-[18px] tracking-[-0.14px] text-bluegray-1000">{bullet}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ),
+    },
+    { id: "highlights", label: "Highlights", content: ACCORDION_ITEMS[1]?.content ?? null },
+    { id: "specifications", label: "Specifications", content: ACCORDION_ITEMS[2]?.content ?? null },
+  ];
 
   return (
     <section className="mx-3 rounded-2xl bg-white px-3 py-4 flex flex-col gap-3">
@@ -1359,7 +1641,7 @@ function ProductDetails() {
         Product Details
       </h2>
       <div className="flex flex-col gap-2">
-        {ACCORDION_ITEMS.map(({ id, label, content }) => {
+        {accordionItems.map(({ id, label, content }) => {
           const isOpen = open === id;
           return (
             <div key={id} className="overflow-hidden rounded-xl">
@@ -1405,25 +1687,34 @@ function BottomBar() {
   );
 }
 
-export default function PdpDesign() {
+export default function PdpDesign({ product = PRODUCTS.charger }: { product?: Product }) {
   return (
     <main className="mx-auto min-h-screen w-full max-w-[375px] bg-gradient-to-b from-white from-0% to-[#F3F3F7] to-[24%] flex flex-col gap-3">
       <section className="relative">
         <HeaderButtons />
-        <img src={ASSETS.productImage} alt="iPhone" className="h-[512px] w-full object-cover" />
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
-          <img src={ASSETS.sliderDots} alt="" className="h-1.5 w-[50px]" />
-        </div>
+        <img src={product.hero} alt={product.name} className="h-[512px] w-full object-cover" />
+        {!product.oos && (
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
+            <img src={ASSETS.sliderDots} alt="" className="h-1.5 w-[50px]" />
+          </div>
+        )}
+        {product.oos && (
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.08)] border border-[#fbd5d5]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#dc2626]" />
+            <span className="text-[#b82121] text-[11px] font-bold uppercase tracking-[1.5px]">Out of Stock</span>
+          </div>
+        )}
       </section>
-      <MainInfo />
+      <MainInfo product={product} />
+      <SuccessorBanner product={product} />
       <ComboCard />
       <AdCard />
       <DeliveryCard />
       <FreeGifts />
-      <VariantPicker />
+      <VariantPicker product={product} />
       <TrustMarkers />
       <PaymentOffers />
-      <ProductDetails />
+      <ProductDetails product={product} />
       <ExtendedWarranty />
       <AdditionalInformation />
       <BestsellerBanner />
